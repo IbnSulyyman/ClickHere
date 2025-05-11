@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NinJa Fatimah</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 10px #ff00ff;
+            margin-bottom: 10px;
+        }
+        
+        .ninja-button {
+            background-color: #ff00ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+        }
+        
+        .ninja-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 0, 255, 0.6);
+        }
+        
+        .ninja-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .ninja {
+            position: absolute;
+            width: 80px;
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .heart {
+            color: #ff00ff;
+            font-size: 1.5rem;
+            margin: 0 5px;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <h1>NinJa Fatimah</h1>
+        <p class="tagline">The stealthiest Ninja in all the land!</p>
+        
+        <div class="ninja-container" id="ninjaContainer"></div>
+        
+        <button class="ninja-button" id="ninjaButton">Ya Fatimah Click Here</button>
+        
+        <div class="message" id="message">
+            You're the most awesome NinJa ever! 
+            <span class="heart">♥</span>
+        </div>
+    </div>
+    
+    <script>
+        // Create stars background
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 3 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.opacity = Math.random() * 0.8 + 0.2;
+            starsContainer.appendChild(star);
+        }
+        
+        // Ninja button functionality
+        const ninjaButton = document.getElementById('ninjaButton');
+        const ninjaContainer = document.getElementById('ninjaContainer');
+        const message = document.getElementById('message');
+        let clickCount = 0;
+        const funnyMessages = [
+            "You're the most awesome NinJa ever!",
+            "Ninjas are stealthy, but you play football🤔! ",
+            "NinJa Fatimah, 😂",
+            "Even Bruce Lee would be impressed by you! ",
+            "Your ninja skills are unmatched! "
+        ];
+        
+        // Create ninja characters
+        function createNinja() {
+            const ninja = document.createElement('div');
+            ninja.classList.add('ninja');
+            
+            // Create ninja image
+            const img = document.createElement('img');
+            img.src = "data:image/svg+xml," + encodeURIComponent(`
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="30" y="20" width="40" height="40" rx="5" fill="#333"/>
+                    <circle cx="40" cy="35" r="5" fill="${Math.random() > 0.5 ? '#ff00ff' : '#00ffff'}"/>
+                    <circle cx="60" cy="35" r="5" fill="${Math.random() > 0.5 ? '#ff00ff' : '#00ffff'}"/>
+                    <rect x="45" y="50" width="10" height="5" fill="white"/>
+                    <rect x="20" y="60" width="60" height="10" rx="5" fill="#333"/>
+                </svg>
+            `);
+            img.style.width = '100%';
+            ninja.appendChild(img);
+            
+            // Position randomly
+            ninja.style.left = Math.random() * 80 + 10 + '%';
+            ninja.style.top = Math.random() * 70 + 10 + '%';
+            ninja.style.transform = 'rotate(' + (Math.random() * 360) + 'deg) scale(0)';
+            
+            return ninja;
+        }
+        
+        ninjaButton.addEventListener('click', function() {
+            clickCount++;
+            
+            // Show a random message
+            message.textContent = funnyMessages[clickCount % funnyMessages.length];
+            message.style.opacity = '1';
+            
+            // Create and animate ninjas
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const ninja = createNinja();
+                    ninjaContainer.appendChild(ninja);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        ninja.style.opacity = '1';
+                        ninja.style.transform = 'rotate(' + (Math.random() * 360) + 'deg) scale(1)';
+                    }, 10);
+                    
+                    // Animate out after delay
+                    setTimeout(() => {
+                        ninja.style.opacity = '0';
+                        ninja.style.transform = 'rotate(' + (Math.random() * 360 + 180) + 'deg) scale(0)';
+                        setTimeout(() => {
+                            ninja.remove();
+                        }, 500);
+                    }, 2000 + Math.random() * 1000);
+                    
+                }, i * 300);
+            }
+            
+            // Button animation
+            this.textContent = clickCount % 3 === 0 ? "Ya Fatimah Click Again!" : "One More Time!";
+            this.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            
+            // Redirect after 5 clicks
+            if (clickCount === 5) {
+                message.textContent = "NinJa Fatimah is being teleported to Maisara😆😅🤣...";
+                message.style.fontSize = "1.8rem";
+                message.style.color = "#ff00ff";
+                message.style.fontWeight = "bold";
+                
+                // Add dramatic effect before redirect
+                setTimeout(() => {
+                    document.body.style.transition = "all 1s";
+                    document.body.style.transform = "scale(5)";
+                    document.body.style.opacity = "0";
+                    
+                    // Redirect after animation
+                    setTimeout(() => {
+                        window.location.href = "https://www.google.com";
+                    }, 1000);
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>
